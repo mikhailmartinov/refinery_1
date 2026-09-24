@@ -134,7 +134,8 @@ with (st.sidebar.form(key="form1")):
         if solverName == "highs":
             solver = pyo.SolverFactory("appsi_highs")
         else:
-            solver = pyo.SolverFactory(solverName, executable=solverPathExeChoice[solverName])
+            solver = pyo.SolverFactory(solverName)  # , executable=solverPathExeChoice[solverName])
+            solver.set_executable(solverPathExeChoice[solverName], validate=False)
         if solverName == "cplex":
             solver.options = {"mip tolerances mipgap": 0.000001}
         elif solverName == "cbc":
