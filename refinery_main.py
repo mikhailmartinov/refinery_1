@@ -15,7 +15,7 @@ import draw_flow
 curDir = os.getcwd()
 solverPathExeChoice = {
     # "scip": "C:\\scip\\SCIPOptSuite 9.2.3\\bin\\scip.exe",
-                       "cbc": os.path.join(curDir, "solvers\\cbc\\cbc_2.10.12\\bin\\cbc.exe"),
+                       "cbc": os.path.join(curDir, "solvers/cbc/cbc_2.10.12/bin/cbc.exe"),
     #                    "highs": "C:\\highs-1.15.1\\bin\\highs.exe",
     #                    "cplex": "D:\\Projects\\demetra\\bin\\x64_win64\\cplex.exe",
     #                    "glpk": "C:\\glpk\\glpk-4.65\\w64\\glpsol.exe",
