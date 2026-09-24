@@ -1,0 +1,90 @@
+{
+	"products": 
+	{
+		"raws": 
+			{
+				"1": "Crude 1", 
+				"2": "Crude 2"
+			},
+		"intermediateProducts": 
+			{
+				"10": "Light naphta", 
+				"11": "Medium naphta", 
+				"12": "Heavy naphta", 
+				"13": "Light oil", 
+				"14": "Heavy oil", 
+				"15": "Residuum", 
+				"16": "Reformed gasoline", 
+				"17": "Cracked gasoline", 
+				"18": "Cracked oil"
+			},
+		"finalProducts": 
+			{
+				"30": "Premium motor fuel", 
+				"31": "Regular motor fuel", 
+				"32": "Jet fuel", 
+				"33": "Fuel oil", 
+				"34": "Lube oil"
+			}
+	},
+	"processes": {
+		"distillation": [
+			{
+				"rawId": "1", 
+				"outputFraction": {"10": 0.1, "11": 0.2, "12": 0.2, "13": 0.12, "14": 0.2, "15": 0.13}
+			},
+			{
+				"rawId": "2", 
+				"outputFraction": {"10": 0.15, "11": 0.25, "12": 0.18, "13": 0.08, "14": 0.19, "15": 0.12}
+			}
+		],
+		"reforming": {
+			"intermediateProductId": "16",
+			"yieldFraction": {"10": 0.6, "11": 0.52, "12": 0.45}
+		},
+		"cracking":
+			[
+				{
+					"rawId": "13",
+					"yieldFraction": {"17": 0.28, "18": 0.68}
+				},
+				{
+					"rawId": "14",
+					"yieldFraction": {"17": 0.2, "18": 0.75}
+				}
+			],		
+		"lubeOilProduction":
+			{
+				"intermediateProductId": "15", 
+				"yieldFraction": 0.5
+			},
+		"blending":
+			{
+				"petrols":
+					{
+						"finalProductsOctaneNumber": {"30": 94, "31": 84},
+						"octaneNumberIngredients": {"10": 90, "11": 80, "12": 70, "16": 115, "17": 105}
+					},
+				"jetFuel":
+					{
+						"finalProductId": "32",
+						"vapourPressureIngredients": {"13": 1.0, "14": 0.6, "18": 1.5, "15": 0.05}
+					},
+				"fuelOil":
+					{
+						"finalProductId": "33",
+						"shareIngredients": {"13": 10, "18": 4, "14": 3, "15": 1}
+					}
+			}
+	},
+	"params": {
+		"rawsAvailable": {"1": 20000, "2": 30000},
+		"distillationMax": 45000,
+		"reformingNaphtaMax": 10000,
+		"crackingOilMax": 8000,
+		"lubeOil": {"min": 500, "max": 1000},
+		"jetFuelVapour": 1,
+		"premiumPetrolByRegularMin": 0.4,
+		"profit": {"30": 700, "31": 600, "32": 400, "33": 350, "34": 150}
+	}
+}
