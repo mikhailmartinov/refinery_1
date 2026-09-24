@@ -1,6 +1,6 @@
 import json
 import os
-# import sys
+import sys
 from datetime import datetime
 
 import streamlit as st
@@ -21,7 +21,7 @@ solverPathExeChoice = {
     #                    "glpk": "C:\\glpk\\glpk-4.65\\w64\\glpsol.exe",
     #                    "ipopt": 'C:\\ipopt\\bin\\ipopt.exe'
 }
-# sys.path.append(solverPathExeChoice["cbc"])
+sys.path.append(solverPathExeChoice["cbc"])
 solverNames = list(solverPathExeChoice.keys())
 # solverName = "cplex"
 
