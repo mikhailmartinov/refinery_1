@@ -1,6 +1,8 @@
 import json
 import os
-import sys
+# import sys
+from datetime import datetime
+
 import streamlit as st
 import streamlit.components.v1 as components
 import pyomo.environ as pyo
@@ -19,7 +21,7 @@ solverPathExeChoice = {
     #                    "glpk": "C:\\glpk\\glpk-4.65\\w64\\glpsol.exe",
     #                    "ipopt": 'C:\\ipopt\\bin\\ipopt.exe'
 }
-# sys.path.append(solverPathExeChoice)
+# sys.path.append(solverPathExeChoice["cbc"])
 solverNames = list(solverPathExeChoice.keys())
 # solverName = "cplex"
 
@@ -119,7 +121,7 @@ with (st.sidebar.form(key="form1")):
     submitted = st.form_submit_button("Рассчитать оптимальный план производства")
     if submitted:
         print()
-        print("=== Новый расчет плана производства ===")
+        print(f"=== Новый расчет плана производства === {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         # print(f"products = {products}")
 
         model = create_model.create_model(distillation, reforming, cracking, lubeOilProduction, octane, octanePetrol,
