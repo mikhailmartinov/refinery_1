@@ -139,45 +139,32 @@ def initModel(fnm):
             else:
                 distillationD2[k2].append(v2)
     distillationDf = pd.DataFrame.from_dict(distillationD2)
-    print(f"distillationDf = {distillationDf}")
 
-    print(f"reforming = {reforming}")
     reformingD2 = {"Сырье": [], "Выход Reformed gasoline": []}
     for k, v in reforming.items():
         reformingD2["Сырье"].append(k)
         reformingD2["Выход Reformed gasoline"].append(v)
     reformingDf = pd.DataFrame.from_dict(reformingD2)
-    print(f"reformingDf = {reformingDf}")
 
-    print(f"cracking = {cracking}")
     crackingD2 = {"Сырье": [], "Выход Cracked gasoline": [], "Выход Cracked oil": []}
     for k, v in cracking.items():
         crackingD2["Сырье"].append(k)
         crackingD2["Выход Cracked gasoline"].append(v["Cracked gasoline"])
         crackingD2["Выход Cracked oil"].append(v["Cracked oil"])
     crackingDf = pd.DataFrame.from_dict(crackingD2)
-    print(f"crackingDf = {crackingDf}")
 
-    print(f"octane = {octane}")
-    print(f"octanePetrol = {octanePetrol}")
     octaneD2 = {"Продукт": list(octane.keys()), "Октановое число": list(octane.values())}
     octanePetrolD2 = {"Продукт": list(octanePetrol.keys()), "Октановое число": list(octanePetrol.values())}
     octaneDf = pd.DataFrame.from_dict(octaneD2)
     octanePetrolDf = pd.DataFrame.from_dict(octanePetrolD2)
-    print(f"octaneDf = {octaneDf}")
-    print(f"octanePetrolDf = {octanePetrolDf}")
 
-    print(f"vapourPressure = {vapourPressure}")
     vapourPressureD2 = {"Продукт": list(vapourPressure.keys()),
                         "Давление насыщенных паров": list(vapourPressure.values())}
     vapourPressureDf = pd.DataFrame.from_dict(vapourPressureD2)
-    print(f"vapourPressureDf = {vapourPressureDf}")
 
-    print(f"fuelOilBlending = {fuelOilBlending}")
     fuelOilBlendingD2 = {"Продукт": list(fuelOilBlending.keys()),
                          "Доля": list(fuelOilBlending.values())}
     fuelOilBlendingDf = pd.DataFrame.from_dict(fuelOilBlendingD2)
-    print(f"fuelOilBlendingDf = {fuelOilBlendingDf}")
 
     return (raws, intermediateProducts, finalProducts, products, distillation, reforming, cracking, lubeOilProduction,
             octane, octanePetrol, vapourPressure,

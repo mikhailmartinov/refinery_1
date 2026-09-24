@@ -233,7 +233,7 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
     g.add_edge(pName1, "lube oil", width=edgesWidth, color=edgeColor,
                label=f"{formatFloatNumber(qLubeOil)}")
 
-    print(f"points = {points}")
+    # print(f"points = {points}")
     g.toggle_physics(False)
 
     return g

@@ -10,13 +10,16 @@ import init_model
 import create_model
 import draw_flow
 
-solverPathExeChoice = {"scip": "C:\\scip\\SCIPOptSuite 9.2.3\\bin\\scip.exe",
-                       "cbc": "C:\\cbc\\cbc_2.10.12\\bin\\cbc.exe",
-                       "highs": "C:\\highs-1.15.1\\bin\\highs.exe",
-                       "cplex": "D:\\Projects\\demetra\\bin\\x64_win64\\cplex.exe",
-                       "glpk": "C:\\glpk\\glpk-4.65\\w64\\glpsol.exe",
-                       "ipopt": 'C:\\ipopt\\bin\\ipopt.exe'}
-sys.path.append(solverPathExeChoice)
+curDir = os.getcwd()
+solverPathExeChoice = {
+    # "scip": "C:\\scip\\SCIPOptSuite 9.2.3\\bin\\scip.exe",
+                       "cbc": os.path.join(curDir, "solvers\\cbc\\cbc_2.10.12\\bin\\cbc.exe"),
+    #                    "highs": "C:\\highs-1.15.1\\bin\\highs.exe",
+    #                    "cplex": "D:\\Projects\\demetra\\bin\\x64_win64\\cplex.exe",
+    #                    "glpk": "C:\\glpk\\glpk-4.65\\w64\\glpsol.exe",
+    #                    "ipopt": 'C:\\ipopt\\bin\\ipopt.exe'
+}
+# sys.path.append(solverPathExeChoice)
 solverNames = list(solverPathExeChoice.keys())
 # solverName = "cplex"
 
@@ -206,16 +209,16 @@ with (st.sidebar.form(key="form1")):
         fuelOilBlendingSum = sum(fuelOilBlending.values())
         qFuelOilBlending = {k: (qFuelOil * v / fuelOilBlendingSum) for k, v in fuelOilBlending.items()}
 
-        print(f"q = {q}")
-        print(f"qd = {qd}")
-        print(f"qCrackingBySource = {qCrackingBySource}")
-        print(f"qReformed = {qReformed}")
-        print(f"qPetrolBySource = {qPetrolBySource}")
-        print(f"qReformedGasoline = {qReformedGasoline}")
-        print(f"qCrackedOil = {qCrackedOil}")
-        print(f"qCrackedGasoline = {qCrackedGasoline}")
-        print(f"qCrackedGasolineByPetrol = {qCrackedGasolineByPetrol}")
-        print(f"qCrackedOilByProduct = {qCrackedOilByProduct}")
+        # print(f"q = {q}")
+        # print(f"qd = {qd}")
+        # print(f"qCrackingBySource = {qCrackingBySource}")
+        # print(f"qReformed = {qReformed}")
+        # print(f"qPetrolBySource = {qPetrolBySource}")
+        # print(f"qReformedGasoline = {qReformedGasoline}")
+        # print(f"qCrackedOil = {qCrackedOil}")
+        # print(f"qCrackedGasoline = {qCrackedGasoline}")
+        # print(f"qCrackedGasolineByPetrol = {qCrackedGasolineByPetrol}")
+        # print(f"qCrackedOilByProduct = {qCrackedOilByProduct}")
 
         optimResult = dict()
         optimResult["profit"] = objProfit
