@@ -16,8 +16,7 @@ import draw_flow
 
 curDir = os.getcwd()
 solverPathExeChoice = {
-    # "cbc": os.path.join(curDir, "solvers/cbc/cbc_2.10.12/bin/cbc.exe"),
-    "cbc": os.path.join(curDir, "cbc.exe"),
+    "cbc": os.path.join(curDir, "solvers/cbc/cbc_2.10.12/bin/cbc.exe"),
     "glpk": os.path.join(curDir, "solvers/glpk/glpk-4.65/w64/glpsol.exe"),
 }
 sys.path.append(solverPathExeChoice["cbc"])
