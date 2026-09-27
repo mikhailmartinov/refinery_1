@@ -59,10 +59,16 @@ def create_model(distillation, reforming, cracking, lubeOilProduction, octane, o
 
     # Риформинг - Reforming
     model.qReformedGasolineByPetrol = pyo.Var(S, R, P, bounds=(0, q_max), within=pyo.NonNegativeIntegers)
+    model.qReformedGasoline = pyo.Var(P, bounds=(0, q_max), within=pyo.NonNegativeReals)
 
-    def exprReformedPetrol(model, p):
-        return sum([model.qReformedGasolineByPetrol[s, r, p] * reforming[r] for s in S for r in R])
-    model.qReformedGasoline = pyo.Expression(P, rule=exprReformedPetrol)
+    def conReformedPetrol_rule(model, p):
+        return model.qReformedGasoline[p] == sum([model.qReformedGasolineByPetrol[s, r, p] * reforming[r]
+                                                  for s in S for r in R])
+    model.conReformedPetrol = pyo.Constraint(P, rule=conReformedPetrol_rule)
+
+    # def exprReformedPetrol(model, p):
+    #     return sum([model.qReformedGasolineByPetrol[s, r, p] * reforming[r] for s in S for r in R])
+    # model.qReformedGasoline = pyo.Expression(P, rule=exprReformedPetrol)
 
     # Крекинг - Cracking
     model.qCrackingBySource = pyo.Var(S, CR, bounds=(0, q_max), within=pyo.NonNegativeIntegers)
@@ -81,10 +87,16 @@ def create_model(distillation, reforming, cracking, lubeOilProduction, octane, o
     # Блендинг бензина
     OCC = [oc for oc in OC if oc not in ["Reformed gasoline", "Cracked gasoline"]]
     model.qPetrolBySource = pyo.Var(S, OCC, P, bounds=(0, q_max), within=pyo.NonNegativeIntegers)
+    model.qPetrol = pyo.Var(P, bounds=(0, q_max), within=pyo.NonNegativeReals)
 
-    def exprQPetrol_rule(model, p):
-        return sum([model.qPetrolBySource[s, occ, p] for occ in OCC for s in S]) + model.qReformedGasoline[p] + model.qCrackedGasolineByPetrol[p]
-    model.qPetrol = pyo.Expression(P, rule=exprQPetrol_rule)
+    def conQPetrol_rule(model, p):
+        return (model.qPetrol[p] == sum([model.qPetrolBySource[s, occ, p] for occ in OCC for s in S]) +
+                model.qReformedGasoline[p] + model.qCrackedGasolineByPetrol[p])
+    model.conQPetrol = pyo.Constraint(P, rule=conQPetrol_rule)
+
+    # def exprQPetrol_rule(model, p):
+    #     return sum([model.qPetrolBySource[s, occ, p] for occ in OCC for s in S]) + model.qReformedGasoline[p] + model.qCrackedGasolineByPetrol[p]
+    # model.qPetrol = pyo.Expression(P, rule=exprQPetrol_rule)
 
     # octaneMin, octaneMax = min(octane.values()), max(octane.values())
     # model.octanePetrol = pyo.Var(P, bounds=(octaneMin, octaneMax), within=pyo.NonNegativeReals)

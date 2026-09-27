@@ -1,0 +1,13 @@
+{
+	"params": 
+		{
+			"rawsAvailable": {"1": 20000, "2": 30000},
+			"distillationMax": 45000,
+			"reformingNaphtaMax": 10000,
+			"crackingOilMax": 8000,
+			"lubeOil": {"min": 500, "max": 1000},
+			"jetFuelVapour": 1,
+			"premiumPetrolByRegularMin": 0.4,
+			"profit": {"Premium motor fuel": 700, "Regular motor fuel": 600, "Jet fuel": 400, "Fuel oil": 350, "Lube oil": 150}
+	}
+}

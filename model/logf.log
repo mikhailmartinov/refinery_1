@@ -1,0 +1,98 @@
+Solver command line: ['D:\\Projects\\refinery_1\\solvers/cbc/cbc_2.10.12/bin/cbc.exe', '-ratio', '1e-05', '-printingOptions', 'all', '-import', 'C:\\Users\\mikha\\AppData\\Local\\Temp\\tmpfesn2uqh.pyomo.lp', '-stat=1', '-solve', '-solu', 'C:\\Users\\mikha\\AppData\\Local\\Temp\\tmpfesn2uqh.pyomo.soln']
+
+Welcome to the CBC MILP Solver 
+Version: 2.10.12 
+Build Date: Aug 20 2024 
+
+command line - D:\Projects\refinery_1\solvers/cbc/cbc_2.10.12/bin/cbc.exe -ratio 1e-05 -printingOptions all -import C:\Users\mikha\AppData\Local\Temp\tmpfesn2uqh.pyomo.lp -stat=1 -solve -solu C:\Users\mikha\AppData\Local\Temp\tmpfesn2uqh.pyomo.soln (default strategy 1)
+ratioGap was changed from 0 to 1e-05
+Option for printingOptions changed from normal to all
+ CoinLpIO::readLp(): Maximization problem reformulated as minimization
+Coin0009I Switching back to maximization to get correct duals etc
+Presolve is modifying 5 integer bounds and re-presolving
+Presolve 25 (-12) rows, 52 (-8) columns and 149 (-20) elements
+Statistics for presolved model
+Original problem has 55 integers (0 of which binary)
+Presolved problem has 48 integers (0 of which binary)
+==== 41 zero objective 6 different
+41 variables have objective of -0
+1 variables have objective of 150
+7 variables have objective of 400
+1 variables have objective of 600
+1 variables have objective of 700
+1 variables have objective of 1575
+==== absolute objective values 6 different
+41 variables have objective of 0
+1 variables have objective of 150
+7 variables have objective of 400
+1 variables have objective of 600
+1 variables have objective of 700
+1 variables have objective of 1575
+==== for integers 39 zero objective 4 different
+39 variables have objective of -0
+1 variables have objective of 150
+7 variables have objective of 400
+1 variables have objective of 1575
+==== for integers absolute objective values 4 different
+39 variables have objective of 0
+1 variables have objective of 150
+7 variables have objective of 400
+1 variables have objective of 1575
+===== end objective counts
+
+
+Problem has 25 rows, 52 columns (11 with objective) and 149 elements
+There are 3 singletons with objective 
+Column breakdown:
+0 of type 0.0->inf, 51 of type 0.0->up, 0 of type lo->inf, 
+1 of type lo->up, 0 of type free, 0 of type fixed, 
+0 of type -inf->0.0, 0 of type -inf->up, 0 of type 0.0->1.0 
+Row breakdown:
+18 of type E 0.0, 0 of type E 1.0, 0 of type E -1.0, 
+0 of type E other, 0 of type G 0.0, 0 of type G 1.0, 
+0 of type G other, 4 of type L 0.0, 0 of type L 1.0, 
+3 of type L other, 0 of type Range 0.0->1.0, 0 of type Range other, 
+0 of type Free 
+Continuous objective value is 2.11365e+07 - 0.00 seconds
+Cgl0004I processed model has 22 rows, 31 columns (29 integer (0 of which binary)) and 92 elements
+Cbc0012I Integer solution of 21136145 found by DiveCoefficient after 16 iterations and 0 nodes (0.01 seconds)
+Cbc0031I 2 added rows had average density of 18.5
+Cbc0013I At root node, 2 cuts changed objective from 21136513 to 21136506 in 10 passes
+Cbc0014I Cut generator 0 (Probing) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 1 (Gomory) - 26 row cuts average 20.4 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is 1
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 38 row cuts average 19.4 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0010I After 0 nodes, 1 on tree, 21136145 best solution, best possible 21136506 (0.01 seconds)
+Cbc0038I Full problem 22 rows 31 columns, reduced to 5 rows 5 columns
+Cbc0012I Integer solution of 21136190 found by DiveCoefficient after 20 iterations and 2 nodes (0.01 seconds)
+Cbc0012I Integer solution of 21136355 found by DiveCoefficient after 25 iterations and 2 nodes (0.01 seconds)
+Cbc0011I Exiting as integer gap of -151.5 less than 1e-10 or 0.001%
+Cbc0001I Search completed - best objective 21136355, took 28 iterations and 3 nodes (0.01 seconds)
+Cbc0032I Strong branching done 52 times (54 iterations), fathomed 0 nodes and fixed 0 variables
+Cbc0035I Maximum depth 3, 1 variables fixed on reduced cost
+Cuts at root node changed objective from 2.11365e+07 to 2.11365e+07
+Probing was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 16 times and created 41 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+Knapsack was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+MixedIntegerRounding2 was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 10 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 10 times and created 38 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found (within gap tolerance)
+
+Objective value:                21136355.00000000
+Upper bound:                    21136506.500
+Gap:                            -0.00
+Enumerated nodes:               3
+Total iterations:               28
+Time (CPU seconds):             0.01
+Time (Wallclock seconds):       0.01
+
+Total time (CPU seconds):       0.03   (Wallclock seconds):       0.03
+
+

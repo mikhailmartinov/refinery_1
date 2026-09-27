@@ -128,7 +128,7 @@ def initModel(fnm):
     jetFuleVapour = paramsJson["jetFuelVapour"]
     premiumPetrolByRegularMin = paramsJson["premiumPetrolByRegularMin"]
     profit = {products[k]: v for k, v in paramsJson["profit"].items()}
-    profit = {k: int(v/100) for k, v in profit.items()}
+    # profit = {k: int(v/100) for k, v in profit.items()}
 
     distillationD2 = {"Сырье": []}
     for k, v in distillation.items():
