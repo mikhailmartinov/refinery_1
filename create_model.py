@@ -1,5 +1,5 @@
 import pyomo.environ as pyo
-import init_model
+import pulp as pl
 
 
 def create_model(distillation, reforming, cracking, lubeOilProduction, octane, octanePetrol, vapourPressure,
@@ -228,3 +228,196 @@ def create_model(distillation, reforming, cracking, lubeOilProduction, octane, o
                                     )
 
     return model
+
+
+def create_modelPuLP(distillation, reforming, cracking, lubeOilProduction, octane, octanePetrol, vapourPressure,
+                     fuelOilBlending, crackedOilUsing, q, distillationMax, reformingNaphtaMax, crackingOilMax,
+                     lubeOilMin, lubeOilMax, jetFuleVapour, premiumPetrolByRegularMin, profit):
+    """
+    Постановка задачи переработки сырой нефти на НПЗ
+    :return: model - Модель типа pulp
+    """
+    model = pl.LpProblem("Base model PuLP", pl.LpMaximize)
+
+    Q = q
+    Dmax = distillationMax
+    RFmax = reformingNaphtaMax
+    CRmax = crackingOilMax
+    profit = profit
+
+    PRmin = premiumPetrolByRegularMin
+
+    q_max = distillationMax
+    JFvapour = jetFuleVapour
+
+    distillation = distillation
+    S = list(distillation.keys())
+    D = list(distillation[S[0]].keys())
+
+    octanePetrol = octanePetrol
+    P = list(octanePetrol.keys())
+
+    octane = octane
+    OC = list(octane.keys())
+
+    VP = list(vapourPressure.keys())
+
+    # FO = list(fuelOilBlending.keys())
+
+    reforming = reforming
+    R = list(reforming.keys())
+
+    cracking = cracking
+    CR = list(cracking.keys())
+
+    COU = crackedOilUsing
+
+    LO = list(lubeOilProduction.keys())
+
+    LOmin, LOmax = lubeOilMin, lubeOilMax
+
+    q, qd = dict(), dict()
+    qReformedGasoline, qReformedGasolineByPetrol = dict(), dict()
+    qCrackingBySource, qCrackedGasolineByPetrol, qCrackedOilByProduct = dict(), dict(), dict()
+    qPetrol, qPetrolBySource = dict(), dict()
+    qJetFuelBySource = dict()
+    qLubeOilBySource = dict()
+
+    # Объемы нефти на входе в НПЗ обоих типов
+    # Прямая перегонка - Distillation
+    for s in S:
+        q[s] = pl.LpVariable(f"q_{s}", lowBound=0, upBound=q_max, cat=pl.LpInteger)
+        for d in D:
+            qd[s, d] = pl.LpVariable(f"q_{s}_{d}", lowBound=0, upBound=q_max, cat=pl.LpInteger)
+            model += q[s] * distillation[s][d] == qd[s, d], f"conQD_{s},{d}"
+
+    # Риформинг - Reforming
+    for p in P:
+        qReformedGasoline[p] = pl.LpVariable(f"qReformedGasoline_{p}", lowBound=0, upBound=q_max, cat=pl.LpContinuous)
+        for s in S:
+            for r in R:
+                qReformedGasolineByPetrol[s, r, p] = pl.LpVariable(f"qReformedGasolineByPetrol_{s}_{r}_{p}",
+                                                                   lowBound=0, upBound=q_max, cat=pl.LpInteger)
+
+    for p in P:
+        model += (qReformedGasoline[p] == sum([qReformedGasolineByPetrol[s, r, p] * reforming[r] for s in S for r in R]),
+                  f"conReformedPetrol_{s},{r}_{p}")
+
+    # Крекинг - Cracking
+    for s in S:
+        for cr in CR:
+            qCrackingBySource[s, cr] = pl.LpVariable(f"qCrackingBySource_{s}_{cr}",
+                                                               lowBound=0, upBound=q_max, cat=pl.LpInteger)
+    qCrackedOil = pl.lpSum([qCrackingBySource[s, cr] * cracking[cr]["Cracked oil"]
+                            for s in S for cr in CR])
+    qCrackedGasoline = pl.lpSum([qCrackingBySource[s, cr] * cracking[cr]["Cracked gasoline"]
+                                 for s in S for cr in CR])
+    for p in P:
+        qCrackedGasolineByPetrol[p] = pl.LpVariable(f"qCrackedGasolineByPetrol_{p}",
+                                                    lowBound=0, upBound=q_max, cat=pl.LpInteger)
+    model += qCrackedGasoline == sum([qCrackedGasolineByPetrol[p] for p in P]), f"conCrackedGasolineByPetrol"
+
+    for cou in COU:
+        qCrackedOilByProduct[cou] = pl.LpVariable(f"qCrackedOilByProduct_{cou}",
+                                                  lowBound=0, upBound=q_max, cat=pl.LpInteger)
+    model += qCrackedOil == sum([qCrackedOilByProduct[cou] for cou in COU]), f"conCrackedOilVolume"
+
+    # Блендинг бензина
+    OCC = [oc for oc in OC if oc not in ["Reformed gasoline", "Cracked gasoline"]]
+
+    for p in P:
+        qPetrol[p] = pl.LpVariable(f"qPetrol_{p}",
+                                   lowBound=0, upBound=q_max, cat=pl.LpContinuous)
+        for s in S:
+            for occ in OCC:
+                qPetrolBySource[s, occ, p] = pl.LpVariable(f"qPetrolBySource_{s}_{occ}_{p}",
+                                                           lowBound=0, upBound=q_max, cat=pl.LpInteger)
+
+    for p in P:
+        model += (qPetrol[p] == sum([qPetrolBySource[s, occ, p] for occ in OCC for s in S]) + qReformedGasoline[p] +
+                  qCrackedGasolineByPetrol[p],
+                  f"conQPetrol_{p}")
+        model += (sum([qPetrolBySource[s, occ, p] * (octanePetrol[p] - octane[occ]) for occ in OCC for s in S]) +
+                  qReformedGasoline[p] * (octanePetrol[p] - octane["Reformed gasoline"]) +
+                  qCrackedGasolineByPetrol[p] * (octanePetrol[p] - octane["Cracked gasoline"]) <= 0,
+                  f"conOctanePetrol_{p}")
+
+    # Объемы компаундирования для производства реактивного топлива "Jet fuel"
+    VPC = [vp for vp in VP if vp != "Cracked oil"]
+    for s in S:
+        for vpc in VPC:
+            qJetFuelBySource[s, vpc] = pl.LpVariable(f"qJetFuelBySource_{s}_{vpc}",
+                                                     lowBound=0, upBound=q_max, cat=pl.LpInteger)
+    qJetFuel = pl.lpSum([qJetFuelBySource[s, vpc] for vpc in VPC for s in S]) + qCrackedOilByProduct["Jet fuel"]
+
+    model += (sum([qJetFuelBySource[s, vpc] * (vapourPressure[vpc] - JFvapour) for vpc in VPC for s in S]) +
+              qCrackedOilByProduct["Jet fuel"] * (vapourPressure["Cracked oil"] - JFvapour) <= 0, f"conVapourJetFuel")
+
+    # Объемы компаундирования для производства мазута "Fuel oil"
+    fuelOilBlendingSum = sum(fuelOilBlending.values())
+
+    qFuelOil = pl.LpVariable(f"qFuelOil", lowBound=0, upBound=q_max, cat=pl.LpContinuous)
+
+    model += (qCrackedOilByProduct["Fuel oil"] * fuelOilBlendingSum == qFuelOil * fuelOilBlending["Cracked oil"],
+              f"conCrackedOilFuelOil")
+
+    # Производство битума
+    for s in S:
+        for lo in LO:
+            qLubeOilBySource[s, lo] = pl.LpVariable(f"qLubeOilBySource_{s}_{lo}",
+                                                    lowBound=0, upBound=q_max, cat=pl.LpInteger)
+    qLubeOil = pl.LpVariable(f"qLubeOil", lowBound=0, upBound=q_max, cat=pl.LpInteger)
+
+    for lo in LO:
+        model += sum([qLubeOilBySource[s, lo] for s in S]) * lubeOilProduction[lo] == qLubeOil, f"conLubeOil_{lo}"
+
+    # Доступность сырья
+    for s in S:
+        model += q[s] <= Q[s], f"conCrudeAvailable_{s}"
+
+    # Доступность для прямой перегонки
+    model += sum([q[s] for s in S]) <= Dmax, f"conDistillationAvailable"
+
+    # Доступность для риформинга
+    model += (sum([qReformedGasolineByPetrol[s, r, p] for s in S for r in R for p in P]) <= RFmax,
+              f"conReformedAvailable")
+
+    # Доступность для крекинга
+    model += sum([qCrackingBySource[s, cr] for s in S for cr in CR]) <= CRmax, f"conCrackingAvailable"
+
+    # Выход битума
+    model += qLubeOil <= LOmax, f"conLubeOilDomainMax"
+    model += qLubeOil >= LOmin, f"conLubeOilDomainMin"
+
+    # Выход Премиум бензина относительно Регуляр
+    model += qPetrol["Premium motor fuel"] >= PRmin * qPetrol["Regular motor fuel"], f"conPremiumRegularPetrol"
+
+    # Выходы после прямой перегонки
+    for d in D:
+        if d in ["Light naphta", "Medium naphta", "Heavy naphta"]:
+            model += (sum(qPetrolBySource[s, d, p] for s in S for p in P) +
+                      sum(qReformedGasolineByPetrol[s, d, p] for s in S for p in P) ==
+                      sum(qd[s, d] for s in S),
+                      f"conD_{d}")
+        elif d in ["Light oil", "Heavy oil"]:
+            model += (sum(qCrackingBySource[s, d] for s in S) +
+                      sum(qJetFuelBySource[s, d] for s in S) +
+                      qFuelOil * fuelOilBlending[d] / fuelOilBlendingSum ==
+                      sum(qd[s, d] for s in S),
+                      f"conD_{d}")
+        elif d == "Residuum":
+            model += (sum(qJetFuelBySource[s, d] for s in S) +
+                      qFuelOil * fuelOilBlending[d] / fuelOilBlendingSum +
+                      sum(qLubeOilBySource[s, d] for s in S) ==
+                      sum(qd[s, d] for s in S),
+                      f"conD_{d}")
+    # Целевая - выручка
+    model += (qPetrol["Premium motor fuel"] * profit["Premium motor fuel"] +
+              qPetrol["Regular motor fuel"] * profit["Regular motor fuel"] +
+              qJetFuel * profit["Jet fuel"] +
+              qFuelOil * profit["Fuel oil"] +
+              qLubeOil * profit["Lube oil"])
+
+    return (model, q, qd ,qReformedGasoline, qReformedGasolineByPetrol, qCrackingBySource, qCrackedGasolineByPetrol,
+            qCrackedOilByProduct, qPetrol, qPetrolBySource, qJetFuelBySource, qLubeOilBySource,
+            qJetFuel, qFuelOil, qLubeOil, qCrackedOil, qCrackedGasoline)
