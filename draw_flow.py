@@ -25,7 +25,7 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
     blendingPetrolColor, distillationEdgeColor, crackingColor = "#808000", "#000000", "#006400"
     blendingJetFuelColor, blendingFuelOilColor = "#20B2AA", "#4682B4"
     rawSize, distillationSize, reformingSize = 25, 20, 10
-    rawShape, distillationShape, reformingShape = "square", "square", "circle"
+    rawShape, distillationShape, reformingShape = "circle", "square", "circle"
     edgesWidth = 1
     edgeColor = "#808080"  # "#A9A9A9" "#C0C0C0"
     processColor = "#F0FFFF"  # "#F0FFF0"  #  "#FFFAFA" "#DCDCDC"

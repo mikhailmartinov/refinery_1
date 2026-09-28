@@ -136,7 +136,7 @@ with sidebar:
     selectedWrapper = "pulp"
     selectedSolver = "cbc"
     useCLI = False  # st.checkbox("Командная строка", value=True)
-    gapTol = st.number_input("Погрешность (%)", value=0.001, format="%0.4f")
+    gapTol = st.number_input("Погрешность (%)", value=0.0001, format="%0.4f", step=0.0001)
     st.write("---")
     premiumMotorFuelPrice = st.number_input("Цена Premium (мелк. опт), $/т",
                                             value=settingParams["params"]["profit"]["Premium motor fuel"],
