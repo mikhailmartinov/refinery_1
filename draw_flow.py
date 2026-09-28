@@ -18,7 +18,7 @@ def createTitle2(p11, p12, p2, v1, v2):
 def drawFlow(raws, intermediateProducts, finalProducts, products,
              q, qd, qCrackingBySource, qReformed, qPetrolBySource, qReformedGasoline,
              qCrackedOil, qCrackedGasoline, qCrackedGasolineByPetrol, qCrackedOilByProduct,
-             qJetFuelBySource, qFuelOil, qFuelOilBlending, qJetFuel, qPetrol, qLubeOil):
+             qJetFuelBySource, qFuelOil, qFuelOilBlending, qJetFuel, qPetrol, qLubeOil, qLubeOilSource):
     g = Network(bgcolor="#fefefe", font_color="black", height="950px", width="100%", directed=True)
 
     rawColor, distillationColor, reformingColor, finalProdColor = "#FFFFFF", "#F5DEB3", "#008080", "#B0E0E6"
@@ -69,12 +69,12 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
                color=processColor, size=40, shape="box")
 
     g.add_node("jet fuel", x=xStart + 6 * xStep, y=yStart + yStep * 2.65,
-               label="Jet fuel", color=finalProdColor, size=40, shape="circle")
+               label=f"Jet fuel\n{formatFloatNumber(qJetFuel)}", color=finalProdColor, size=40, shape="circle")
     g.add_node("fuel oil", x=xStart + 6 * xStep, y=yStart + yStep * 4.25,
-               label="Fuel oil", color=finalProdColor, size=40, shape="circle")
+               label=f"Fuel oil\n{formatFloatNumber(qFuelOil)}", color=finalProdColor, size=40, shape="circle")
 
     g.add_node("lube oil", x=xStart + 6 * xStep, y=yStart + yStep * 5.6,
-               label="Lube oil", color=finalProdColor, size=40, shape="circle")
+               label=f"Lube oil\n{formatFloatNumber(qLubeOil)}", color=finalProdColor, size=40, shape="circle")
 
     rawsName = list(raws.values())
     distillationProducts = []
@@ -196,9 +196,11 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
                label=f"{formatFloatNumber(qFuelOilBlending[pn])}")
 
     g.add_edge("blending jet fuel", "jet fuel", width=edgesWidth, color=edgeColor,
-               label=f"{formatFloatNumber(qJetFuel)}")
+               label=f"{formatFloatNumber(qJetFuel)}",
+               title=createTitle("Blending", "Jet fuel", formatFloatNumber(qJetFuel)))
     g.add_edge("blending fuel oil", "fuel oil", width=edgesWidth, color=edgeColor,
-               label=f"{formatFloatNumber(qFuelOil)}")
+               label=f"{formatFloatNumber(qFuelOil)}",
+               title=createTitle("Blending", "Fuel oil", formatFloatNumber(qFuelOil)))
 
     pn = motorFuels[0]
     pName1, pName2 = "premium_1", "premium_2"
@@ -207,11 +209,13 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
     g.add_node(pName2, x=xStart + 5.5 * xStep, y=- 2.1 * yStep,
                label=" ", size=0.5, shape="dot", color=edgeColor)
     g.add_node(pn, x=xStart + 5.5 * xStep, y=2 * yStep,
-               label=f"Premium\n motor fuel", color=finalProdColor, size=50, shape="circle")
+               label=f"Premium\n motor fuel\n{formatFloatNumber(qPetrol[pn])}",
+               color=finalProdColor, size=50, shape="circle")
     g.add_edge("blending premium regular", pName1, width=edgesWidth, color=edgeColor)
     g.add_edge(pName1, pName2, width=edgesWidth, color=edgeColor)
     g.add_edge(pName2, pn, width=edgesWidth, color=edgeColor,
-               label=f"{formatFloatNumber(qPetrol[pn])}")
+               label=f"{formatFloatNumber(qPetrol[pn])}",
+               title=createTitle("Blending", pn, formatFloatNumber(qPetrol[pn])))
 
     pn = motorFuels[1]
     pName1, pName2 = "regular_1", "regular_2"
@@ -220,18 +224,21 @@ def drawFlow(raws, intermediateProducts, finalProducts, products,
     g.add_node(pName2, x=xStart + 6 * xStep, y=- 2.6 * yStep,
                label=" ", size=0.5, shape="dot", color=edgeColor)
     g.add_node(pn, x=xStart + 6 * xStep, y=2 * yStep,
-               label=f"Regular\n motor fuel", color=finalProdColor, size=50, shape="circle")
+               label=f"Regular\n motor fuel\n{formatFloatNumber(qPetrol[pn])}",
+               color=finalProdColor, size=50, shape="circle")
     g.add_edge("blending premium regular", pName1, width=edgesWidth, color=edgeColor)
     g.add_edge(pName1, pName2, width=edgesWidth, color=edgeColor)
     g.add_edge(pName2, pn, width=edgesWidth, color=edgeColor,
-               label=f"{formatFloatNumber(qPetrol[pn])}")
+               label=f"{formatFloatNumber(qPetrol[pn])}",
+               title=createTitle("Blending", pn, formatFloatNumber(qPetrol[pn])))
 
     pName1 = "Residuum-lube oil_1"
     g.add_node(pName1, x=xStart + 2 * xStep, y=yStart + yStep * 5.6,
                label=" ", size=0.5, shape="dot", color=edgeColor)
     g.add_edge("Residuum", pName1, width=edgesWidth, color=edgeColor)
     g.add_edge(pName1, "lube oil", width=edgesWidth, color=edgeColor,
-               label=f"{formatFloatNumber(qLubeOil)}")
+               label=f"{formatFloatNumber(qLubeOilSource)}",
+               title=createTitle("Residuum", "Lube oil", formatFloatNumber(qLubeOilSource)))
 
     # print(f"points = {points}")
     g.toggle_physics(False)

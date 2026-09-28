@@ -232,7 +232,7 @@ def create_model(distillation, reforming, cracking, lubeOilProduction, octane, o
 
 def create_modelPuLP(distillation, reforming, cracking, lubeOilProduction, octane, octanePetrol, vapourPressure,
                      fuelOilBlending, crackedOilUsing, q, distillationMax, reformingNaphtaMax, crackingOilMax,
-                     lubeOilMin, lubeOilMax, jetFuleVapour, premiumPetrolByRegularMin, profit):
+                     lubeOilMin, lubeOilMax, jetFuleVapour, premiumPetrolByRegularMin, profit, tradeData):
     """
     Постановка задачи переработки сырой нефти на НПЗ
     :return: model - Модель типа pulp
@@ -411,9 +411,33 @@ def create_modelPuLP(distillation, reforming, cracking, lubeOilProduction, octan
                       sum(qLubeOilBySource[s, d] for s in S) ==
                       sum(qd[s, d] for s in S),
                       f"conD_{d}")
+
+    qPetrolTrade, qPetrolRetail, qPetrolB = dict(), dict(), dict()
+    for p in P:
+        qPetrolTrade[p] = pl.LpVariable(f"qPetrolTrade_{p}", lowBound=0, upBound=q_max,
+                                        cat=pl.LpContinuous)
+        qPetrolRetail[p] = pl.LpVariable(f"qPetrolRetail_{p}", lowBound=0, upBound=q_max,
+                                         cat=pl.LpContinuous)
+        qPetrolB[p] = pl.LpVariable(f"qPetrolB_{p}", cat=pl.LpBinary)
+
+        model += qPetrolRetail[p] + qPetrolTrade[p] == qPetrol[p], f"conPetrolRetailTrade_{p}"
+
+        model += qPetrolRetail[p] >= qPetrolB[p] * tradeData[p]["tradeVol"], f"conPetrolRetailVolMin_{p}"
+        model += qPetrolRetail[p] <= tradeData[p]["tradeVol"], f"conPetrolRetailVolMax_{p}"
+
+        model += qPetrolTrade[p] >= qPetrolB[p] * tradeData[p]["tradeVol"], f"conPetrolTradeVolMin_{p}"
+        model += qPetrolTrade[p] <= qPetrolB[p] * q_max, f"conPetrolTradeVolMax_{p}"
+
     # Целевая - выручка
-    model += (qPetrol["Premium motor fuel"] * profit["Premium motor fuel"] +
-              qPetrol["Regular motor fuel"] * profit["Regular motor fuel"] +
+    # model += (qPetrol["Premium motor fuel"] * profit["Premium motor fuel"] +
+    #           qPetrol["Regular motor fuel"] * profit["Regular motor fuel"] +
+    #           qJetFuel * profit["Jet fuel"] +
+    #           qFuelOil * profit["Fuel oil"] +
+    #           qLubeOil * profit["Lube oil"])
+    model += (qPetrolRetail["Premium motor fuel"] * profit["Premium motor fuel"] +
+              qPetrolTrade["Premium motor fuel"] * tradeData["Premium motor fuel"]["tradePrice"] +
+              qPetrolRetail["Regular motor fuel"] * profit["Regular motor fuel"] +
+              qPetrolTrade["Regular motor fuel"] * tradeData["Regular motor fuel"]["tradePrice"] +
               qJetFuel * profit["Jet fuel"] +
               qFuelOil * profit["Fuel oil"] +
               qLubeOil * profit["Lube oil"])

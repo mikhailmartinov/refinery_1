@@ -8,6 +8,19 @@
 			"lubeOil": {"min": 500, "max": 1000},
 			"jetFuelVapour": 1,
 			"premiumPetrolByRegularMin": 0.4,
-			"profit": {"Premium motor fuel": 700, "Regular motor fuel": 600, "Jet fuel": 400, "Fuel oil": 350, "Lube oil": 150}
+			"profit": {"Premium motor fuel": 700, "Regular motor fuel": 600, "Jet fuel": 400, "Fuel oil": 350, "Lube oil": 150},
+			"trade": 
+			{
+				"Premium motor fuel": 
+				{
+					"tradePrice": 650,
+					"tradeVol": 5000
+				},
+				"Regular motor fuel": 
+				{
+					"tradePrice": 500,
+					"tradeVol": 10000
+				}
+			}
 	}
 }

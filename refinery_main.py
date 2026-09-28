@@ -86,13 +86,15 @@ def loadData():
     with open(settingParamsFileName, "r", encoding="utf-8") as sp:
         settingParams = json.load(sp)
 
+    objProfitCurrent = summaryData["profit"]
     (raws, intermediateProducts, finalProducts, products, distillation, reforming, cracking, lubeOilProduction, octane,
      octanePetrol, vapourPressure, fuelOilBlending, crackedOilUsing, q, distillationMax, reformingNaphtaMax,
      crackingOilMax, lubeOilMin, lubeOilMax, jetFuleVapour, premiumPetrolByRegularMin, profit,
      distillationDf, reformingDf, crackingDf, octaneDf, octanePetrolDf,
      vapourPressureDf, fuelOilBlendingDf) = init_model.initModel(dataFileName)
 
-    return (summaryData, settingParams, raws, intermediateProducts, finalProducts, products, distillation, reforming,
+    return (summaryData, objProfitCurrent, settingParams, raws, intermediateProducts, finalProducts, products,
+            distillation, reforming,
             cracking, lubeOilProduction, octane, octanePetrol, vapourPressure, fuelOilBlending, crackedOilUsing,
             q, distillationMax, reformingNaphtaMax, crackingOilMax, lubeOilMin, lubeOilMax, jetFuleVapour,
             premiumPetrolByRegularMin, profit, distillationDf, reformingDf, crackingDf, octaneDf, octanePetrolDf,
@@ -118,38 +120,61 @@ dash1 = st.container()
 dash2 = st.container()
 dash3 = st.container()
 
-(summaryData, settingParams, raws, intermediateProducts, finalProducts, products, distillation, reforming, cracking,
+(summaryData, objProfitCurrent, settingParams, raws, intermediateProducts, finalProducts, products,
+ distillation, reforming, cracking,
  lubeOilProduction, octane, octanePetrol, vapourPressure, fuelOilBlending, crackedOilUsing, q, distillationMax,
  reformingNaphtaMax, crackingOilMax, lubeOilMin, lubeOilMax, jetFuleVapour, premiumPetrolByRegularMin, profit,
  distillationDf, reformingDf, crackingDf, octaneDf, octanePetrolDf, vapourPressureDf, fuelOilBlendingDf) = loadData()
 
 
 with sidebar:
-    selectedWrapper = st.selectbox("Библиотека", ["pyomo", "pulp"])
-    if selectedWrapper == "pyomo":
-        selectedSolver = st.selectbox("Решатель", solverNames)
-    elif selectedWrapper == "pulp":
-        selectedSolver = st.selectbox("Решатель", ["highs", "cbc", "scip"])
-    useCLI = st.checkbox("Командная строка", value=True)
+    # selectedWrapper = st.selectbox("Библиотека", ["pulp", "pyomo"], disabled=True)
+    # if selectedWrapper == "pyomo":
+    #     selectedSolver = st.selectbox("Решатель", solverNames)
+    # elif selectedWrapper == "pulp":
+    #     selectedSolver = st.selectbox("Решатель", ["cbc", "scip", "highs"], disabled=True)
+    selectedWrapper = "pulp"
+    selectedSolver = "cbc"
+    useCLI = False  # st.checkbox("Командная строка", value=True)
     gapTol = st.number_input("Погрешность (%)", value=0.001, format="%0.4f")
-    premiumMotorFuelPrice = st.number_input("Цена Premium",
+    st.write("---")
+    premiumMotorFuelPrice = st.number_input("Цена Premium (мелк. опт), $/т",
                                             value=settingParams["params"]["profit"]["Premium motor fuel"],
                                             min_value=690, max_value=710)
-    regularMotorFuelPrice = st.number_input("Цена Regular",
+    premiumTradePrice = st.number_input("Цена Premium (опт), $/т",
+                                        value=settingParams["params"]["trade"]["Premium motor fuel"][
+                                            "tradePrice"],
+                                        min_value=640, max_value=660)
+    premiumTradeVol = st.number_input("Мин. объем Premium (опт), т",
+                                      value=settingParams["params"]["trade"]["Premium motor fuel"][
+                                          "tradeVol"],
+                                      min_value=4000, max_value=6000)
+    st.write("---")
+    regularMotorFuelPrice = st.number_input("Цена Regular (мелк. опт), $/т",
                                             value=settingParams["params"]["profit"]["Regular motor fuel"],
                                             min_value=590, max_value=610)
-    jetFuelPrice = st.number_input("Цена Керосина",
-                                            value=settingParams["params"]["profit"]["Jet fuel"],
-                                            min_value=390, max_value=410)
-    fuelOilPrice = st.number_input("Цена Мазута",
-                                            value=settingParams["params"]["profit"]["Fuel oil"],
-                                            min_value=340, max_value=360)
-    lubeOilPrice = st.number_input("Цена Масел",
-                                            value=settingParams["params"]["profit"]["Lube oil"],
-                                            min_value=140, max_value=160)
+    regularTradePrice = st.number_input("Цена Regular (опт), $/т",
+                                        value=settingParams["params"]["trade"]["Regular motor fuel"][
+                                            "tradePrice"],
+                                        min_value=490, max_value=510)
+    regularTradeVol = st.number_input("Мин. объем Premium (опт), т",
+                                      value=settingParams["params"]["trade"]["Regular motor fuel"][
+                                          "tradeVol"],
+                                      min_value=9000, max_value=11000)
 
-with (st.sidebar.form(key="form1")):
+with st.sidebar.form(key="form1"):
     submitted = st.form_submit_button("Рассчитать оптимальный план производства")
+    st.write("---")
+    jetFuelPrice = st.number_input("Цена Керосина, $/т",
+                                   value=settingParams["params"]["profit"]["Jet fuel"],
+                                   min_value=390, max_value=410)
+    fuelOilPrice = st.number_input("Цена Мазута, $/т",
+                                   value=settingParams["params"]["profit"]["Fuel oil"],
+                                   min_value=340, max_value=360)
+    lubeOilPrice = st.number_input("Цена Масел, $/т",
+                                   value=settingParams["params"]["profit"]["Lube oil"],
+                                   min_value=140, max_value=160)
+
     if submitted:
         print()
         print(f"=== Новый расчет плана производства === {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -163,6 +188,11 @@ with (st.sidebar.form(key="form1")):
         profit["Jet fuel"] = jetFuelPrice
         profit["Fuel oil"] = fuelOilPrice
         profit["Lube oil"] = lubeOilPrice
+
+        tradeData = {
+            "Premium motor fuel": {"tradePrice": premiumTradePrice, "tradeVol": premiumTradeVol},
+            "Regular motor fuel": {"tradePrice": regularTradePrice, "tradeVol": regularTradeVol}
+        }
 
         if selectedWrapper == "pyomo":
             print(f"=== Pyomo START ===")
@@ -209,7 +239,7 @@ with (st.sidebar.form(key="form1")):
                 q, qd, qCrackingBySource, qReformed = dict(), dict(), dict(), dict()
                 qPetrolBySource, qReformedGasoline, qCrackedGasolineByPetrol = dict(), dict(), dict()
                 qCrackedOilByProduct, qJetFuelBySource, qPetrol = dict(), dict(), dict()
-
+                qLubeOilBySource = dict()
                 for sd in solData:
                     if "q(" in sd[0]:
                         l = len("q(")
@@ -252,6 +282,10 @@ with (st.sidebar.form(key="form1")):
                         l = len("qJetFuelBySource(")
                         k = tuple(sd[0][l:][:-1].split("_"))
                         qJetFuelBySource[k] = sd[1]
+                    elif "qLubeOilBySource(" in sd[0]:
+                        l = len("qLubeOilBySource(")
+                        k = tuple(sd[0][l:][:-1].split("_"))
+                        qLubeOilBySource[k] = sd[1]
                     elif "qReformedGasoline(" in sd[0]:
                         l = len("qReformedGasoline(")
                         k = sd[0][l:][:-1].split("_")
@@ -314,6 +348,7 @@ with (st.sidebar.form(key="form1")):
                 q, qd, qCrackingBySource, qReformed = dict(), dict(), dict(), dict()
                 qPetrolBySource, qReformedGasoline, qCrackedGasolineByPetrol = dict(), dict(), dict()
                 qCrackedOilByProduct, qJetFuelBySource, qPetrol = dict(), dict(), dict()
+                qLubeOilBySource = dict()
                 for v in model.component_objects(ctype=pyo.Var):
                     if pyo.name(v) == "q":
                         for index in v:
@@ -345,6 +380,9 @@ with (st.sidebar.form(key="form1")):
                     elif pyo.name(v) == "qPetrol":
                         for index in v:
                             qPetrol[index] = pyo.value(v[index])
+                    elif pyo.name(v) == "qLubeOilBySource":
+                        for index in v:
+                            qLubeOilBySource[index] = pyo.value(v[index])
                     elif pyo.name(v) == "qFuelOil":
                         qFuelOil = pyo.value(v)
                     elif pyo.name(v) == "qLubeOil":
@@ -371,7 +409,7 @@ with (st.sidebar.form(key="form1")):
                 crackingOilMax,
                 lubeOilMin, lubeOilMax, jetFuleVapour,
                 premiumPetrolByRegularMin,
-                profit)
+                profit, tradeData)
             print(f"available solvers is {pl.listSolvers(onlyAvailable=True)}")
             model.writeLP(modelFileNameLPPuLP)
 
@@ -403,6 +441,7 @@ with (st.sidebar.form(key="form1")):
                 qCrackedGasolineByPetrol = {k: v.value() for k, v in qCrackedGasolineByPetrol.items()}
                 qCrackedOilByProduct = {k: v.value() for k, v in qCrackedOilByProduct.items()}
                 qJetFuelBySource = {k: v.value() for k, v in qJetFuelBySource.items()}
+                qLubeOilBySource = {k: v.value() for k, v in qLubeOilBySource.items()}
                 qJetFuel = qJetFuel.value()
                 qFuelOil = qFuelOil.value()
                 qLubeOil = qLubeOil.value()
@@ -411,6 +450,7 @@ with (st.sidebar.form(key="form1")):
 
         fuelOilBlendingSum = sum(fuelOilBlending.values())
         qFuelOilBlending = {k: (qFuelOil * v / fuelOilBlendingSum) for k, v in fuelOilBlending.items()}
+        qLubeOilSource = sum(qLubeOilBySource.values())
 
         print(f"q = {q}")
         print(f"qd = {qd}")
@@ -431,6 +471,7 @@ with (st.sidebar.form(key="form1")):
 
         optimResult = dict()
         optimResult["profit"] = objProfit
+        optimResult["profitPrev"] = objProfitCurrent
         optimResult["Crude 1"], optimResult["Crude 2"] = q["Crude 1"], q["Crude 2"]
         optimResult["Total Inflow"] = q["Crude 1"] + q["Crude 2"]
         optimResult["Premium motor fuel"] = qPetrol["Premium motor fuel"]
@@ -447,7 +488,8 @@ with (st.sidebar.form(key="form1")):
         g = draw_flow.drawFlow(raws, intermediateProducts, finalProducts, products,
                                q, qd, qCrackingBySource, qReformed, qPetrolBySource, qReformedGasoline,
                                qCrackedOil, qCrackedGasoline, qCrackedGasolineByPetrol, qCrackedOilByProduct,
-                               qJetFuelBySource, qFuelOil, qFuelOilBlending, qJetFuel, qPetrol, qLubeOil)
+                               qJetFuelBySource, qFuelOil, qFuelOilBlending, qJetFuel, qPetrol,
+                               qLubeOil, qLubeOilSource)
         g.save_graph(graphFlowFileName)
 
         st.rerun()
@@ -459,7 +501,8 @@ with dash1:
 
 with dash2:
     col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
-    col1.metric(label="Выручка", value=millify(summaryData["profit"] / 100, precision=3) + " $")
+    col1.metric(label="Выручка", value=millify(summaryData["profit"] / 100, precision=3) + " $",
+                delta=round((summaryData["profit"] - summaryData["profitPrev"])/ 100, 3))
     col2.metric(label="Вход, итого", value=millify(summaryData["Total Inflow"], precision=3) + " т")
     col3.metric(label="Выход, итого", value=millify(summaryData["Total Outflow"], precision=3) + " т")
     col4.metric(label="Выход бензина Premium", value=millify(summaryData["Premium motor fuel"], precision=3) + " т")
@@ -480,17 +523,17 @@ with dash3:
         with tab11:
             st.markdown("<h5 style='text-align': left;> Выходы после атмосферной перегонки </h5>",
                         unsafe_allow_html=True)
-            st.dataframe(distillationDf, hide_index=True)
+            st.dataframe(distillationDf, hide_index=True, use_container_width=False)
 
         with tab12:
             st.markdown("<h5 style='text-align': left;> Выходы после Риформинга </h5>",
                         unsafe_allow_html=True)
-            st.dataframe(reformingDf, hide_index=True)
+            st.dataframe(reformingDf, hide_index=True, use_container_width=False)
 
         with tab13:
             st.markdown("<h5 style='text-align': left;> Выходы после Крекинга </h5>",
                         unsafe_allow_html=True)
-            st.dataframe(crackingDf, hide_index=True)
+            st.dataframe(crackingDf, hide_index=True, use_container_width=False)
 
         with tab14:
             st.markdown("<h5 style='text-align': left;> Октановое число промежуточных и конечных продуктов </h5>",
@@ -512,12 +555,12 @@ with dash3:
             st.markdown("<h5 style='text-align': left;> Давление насыщенных паров продуктов "
                         "компаундирования для керосина </h5>",
                         unsafe_allow_html=True)
-            st.dataframe(vapourPressureDf, hide_index=True)
+            st.dataframe(vapourPressureDf, hide_index=True, use_container_width=False)
 
         with tab16:
             st.markdown("<h5 style='text-align': left;> Пропорции продуктов компаундирования для керосина </h5>",
                         unsafe_allow_html=True)
-            st.dataframe(fuelOilBlendingDf, hide_index=True)
+            st.dataframe(fuelOilBlendingDf, hide_index=True, use_container_width=False)
 
     with tab2:
         with open(graphFlowFileName) as gHtml:

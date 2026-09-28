@@ -7,7 +7,8 @@ OBJ: 400 qCrackedOilByProduct_Jet_fuel + 350 qFuelOil
  + 400 qJetFuelBySource_Crude_2_Heavy_oil
  + 400 qJetFuelBySource_Crude_2_Light_oil
  + 400 qJetFuelBySource_Crude_2_Residuum + 150 qLubeOil
- + 700 qPetrol_Premium_motor_fuel + 600 qPetrol_Regular_motor_fuel
+ + 700 qPetrolRetail_Premium_motor_fuel + 600 qPetrolRetail_Regular_motor_fuel
+ + 650 qPetrolTrade_Premium_motor_fuel + 500 qPetrolTrade_Regular_motor_fuel
 Subject To
 conCrackedGasolineByPetrol: - qCrackedGasolineByPetrol_Premium_motor_fuel
  - qCrackedGasolineByPetrol_Regular_motor_fuel
@@ -88,6 +89,26 @@ conOctanePetrol_Regular_motor_fuel:
  - 6 qPetrolBySource_Crude_2_Light_naphta_Regular_motor_fuel
  + 4 qPetrolBySource_Crude_2_Medium_naphta_Regular_motor_fuel
  - 31 qReformedGasoline_Regular_motor_fuel <= 0
+conPetrolRetailTrade_Premium_motor_fuel: qPetrolRetail_Premium_motor_fuel
+ + qPetrolTrade_Premium_motor_fuel - qPetrol_Premium_motor_fuel = 0
+conPetrolRetailTrade_Regular_motor_fuel: qPetrolRetail_Regular_motor_fuel
+ + qPetrolTrade_Regular_motor_fuel - qPetrol_Regular_motor_fuel = 0
+conPetrolRetailVolMax_Premium_motor_fuel: qPetrolRetail_Premium_motor_fuel
+ <= 5000
+conPetrolRetailVolMax_Regular_motor_fuel: qPetrolRetail_Regular_motor_fuel
+ <= 10000
+conPetrolRetailVolMin_Premium_motor_fuel: - 5000 qPetrolB_Premium_motor_fuel
+ + qPetrolRetail_Premium_motor_fuel >= 0
+conPetrolRetailVolMin_Regular_motor_fuel: - 10000 qPetrolB_Regular_motor_fuel
+ + qPetrolRetail_Regular_motor_fuel >= 0
+conPetrolTradeVolMax_Premium_motor_fuel: - 45000 qPetrolB_Premium_motor_fuel
+ + qPetrolTrade_Premium_motor_fuel <= 0
+conPetrolTradeVolMax_Regular_motor_fuel: - 45000 qPetrolB_Regular_motor_fuel
+ + qPetrolTrade_Regular_motor_fuel <= 0
+conPetrolTradeVolMin_Premium_motor_fuel: - 5000 qPetrolB_Premium_motor_fuel
+ + qPetrolTrade_Premium_motor_fuel >= 0
+conPetrolTradeVolMin_Regular_motor_fuel: - 10000 qPetrolB_Regular_motor_fuel
+ + qPetrolTrade_Regular_motor_fuel >= 0
 conPremiumRegularPetrol: qPetrol_Premium_motor_fuel
  - 0.4 qPetrol_Regular_motor_fuel >= 0
 conQD_Crude_1,Heavy_naphta: 0.2 q_Crude_1 - q_Crude_1_Heavy_naphta = 0
@@ -183,6 +204,10 @@ Bounds
  0 <= qPetrolBySource_Crude_2_Light_naphta_Regular_motor_fuel <= 45000
  0 <= qPetrolBySource_Crude_2_Medium_naphta_Premium_motor_fuel <= 45000
  0 <= qPetrolBySource_Crude_2_Medium_naphta_Regular_motor_fuel <= 45000
+ qPetrolRetail_Premium_motor_fuel <= 45000
+ qPetrolRetail_Regular_motor_fuel <= 45000
+ qPetrolTrade_Premium_motor_fuel <= 45000
+ qPetrolTrade_Regular_motor_fuel <= 45000
  qPetrol_Premium_motor_fuel <= 45000
  qPetrol_Regular_motor_fuel <= 45000
  0 <= qReformedGasolineByPetrol_Crude_1_Heavy_naphta_Premium_motor_fuel <= 45000
@@ -269,4 +294,7 @@ q_Crude_2_Light_naphta
 q_Crude_2_Light_oil
 q_Crude_2_Medium_naphta
 q_Crude_2_Residuum
+Binaries
+qPetrolB_Premium_motor_fuel
+qPetrolB_Regular_motor_fuel
 End

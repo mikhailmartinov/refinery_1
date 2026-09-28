@@ -2,7 +2,7 @@
 
 max 
 objProfit:
-+700 qPetrol(Premium_motor_fuel)
++710 qPetrol(Premium_motor_fuel)
 +600 qPetrol(Regular_motor_fuel)
 +400 qJetFuelBySource(Crude_1_Light_oil)
 +400 qJetFuelBySource(Crude_1_Heavy_oil)

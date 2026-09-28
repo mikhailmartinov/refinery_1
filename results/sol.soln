@@ -1,4 +1,4 @@
-Optimal (within gap tolerance) - objective value 21136355.00000000
+Optimal - objective value 21204681.00000000
       0 c_e_conQD(Crude_1_Light_naphta)_                                                  0                      -0
       1 c_e_conQD(Crude_1_Medium_naphta)_                                                 0                      -0
       2 c_e_conQD(Crude_1_Heavy_naphta)_                                                  0                      -0
@@ -11,33 +11,33 @@ Optimal (within gap tolerance) - objective value 21136355.00000000
       9 c_e_conQD(Crude_2_Light_oil)_                                        -4.5474735e-13                      -0
      10 c_e_conQD(Crude_2_Heavy_oil)_                                         -9.094947e-13                      -0
      11 c_e_conQD(Crude_2_Residuum)_                                         -4.5474735e-13                      -0
-     12 c_e_conReformedPetrol(Premium_motor_fuel)_                            2.2737368e-13                     700
-     13 c_e_conReformedPetrol(Regular_motor_fuel)_                                        0                     600
+     12 c_e_conReformedPetrol(Premium_motor_fuel)_                            2.2737368e-13                     710
+     13 c_e_conReformedPetrol(Regular_motor_fuel)_                            2.2737368e-13                     600
      14 c_e_conCrackedGasolineByPetrol_                                      -2.2737368e-13                      -0
      15 c_e_conCrackedOilVolume_                                                          0                      -0
-     16 c_e_conQPetrol(Premium_motor_fuel)_                                               0                     700
-     17 c_e_conQPetrol(Regular_motor_fuel)_                                   1.8189894e-12                     600
-     18 c_u_conOctanePetrol(Premium_motor_fuel)_                                      -8.95                      -0
-     19 c_u_conOctanePetrol(Regular_motor_fuel)_                                      -1.15                      -0
+     16 c_e_conQPetrol(Premium_motor_fuel)_                                  -4.5474735e-13                     710
+     17 c_e_conQPetrol(Regular_motor_fuel)_                                               0                     600
+     18 c_u_conOctanePetrol(Premium_motor_fuel)_                                       -0.1                      -0
+     19 c_u_conOctanePetrol(Regular_motor_fuel)_                                      -0.55                      -0
      20 c_u_conVapourJetFuel_                                                       -3429.5                      -0
      21 c_e_conCrackedOilFuelOil_                                                         0                   -87.5
      22 c_e_conLubeOil(Residuum)_                                             5.6843419e-14                      -0
      23 c_u_conCrudeAvailable(Crude_1)_                                               15000                      -0
      24 c_u_conCrudeAvailable(Crude_2)_                                               30000                      -0
      25 c_u_conDistillationAvailable_                                                 45000                      -0
-     26 c_u_conReformedAvailable_                                                      5408                      -0
+     26 c_u_conReformedAvailable_                                                      5407                      -0
      27 c_u_conCrackingAvailable_                                                      8000                      -0
      28 r_l_conLubeOildomain_                                                           500                      -0
      29 r_u_conLubeOildomain_                                                           500                      -0
-     30 c_u_conPremiumRegularPetrol_                                                  -3.29                      -0
+     30 c_u_conPremiumRegularPetrol_                                                  -0.48                      -0
      31 c_e_conD(1)_                                                                      0                      -0
      32 c_e_conD(2)_                                                                      0                      -0
      33 c_e_conD(3)_                                                                      0                      -0
      34 c_e_conD(4)_                                                                      0                      -0
      35 c_e_conD(5)_                                                          4.5474735e-13                      -0
      36 c_e_conD(6)_                                                          1.1368684e-13                      -0
-      0 qPetrol(Premium_motor_fuel)                                                 6819.95                      -0
-      1 qPetrol(Regular_motor_fuel)                                                17041.65                      -0
+      0 qPetrol(Premium_motor_fuel)                                                  6818.1                      -0
+      1 qPetrol(Regular_motor_fuel)                                                17044.05                      -0
       2 qJetFuelBySource(Crude_1_Light_oil)                                               0                     400
       3 qJetFuelBySource(Crude_1_Heavy_oil)                                            4900                     400
       4 qJetFuelBySource(Crude_1_Residuum)                                             4550                     400
@@ -61,36 +61,36 @@ Optimal (within gap tolerance) - objective value 21136355.00000000
      22 qd(Crude_2_Light_oil)                                                          2400                      -0
      23 qd(Crude_2_Heavy_oil)                                                          5700                      -0
      24 qd(Crude_2_Residuum)                                                           3600                      -0
-     25 qReformedGasoline(Premium_motor_fuel)                                       1345.95                      -0
-     26 qReformedGasolineByPetrol(Crude_1_Light_naphta_Premium_motor_fuel)                0                     420
-     27 qReformedGasolineByPetrol(Crude_1_Medium_naphta_Premium_motor_fuel)               0                     364
-     28 qReformedGasolineByPetrol(Crude_1_Heavy_naphta_Premium_motor_fuel)             2991                     315
-     29 qReformedGasolineByPetrol(Crude_2_Light_naphta_Premium_motor_fuel)                0                     420
-     30 qReformedGasolineByPetrol(Crude_2_Medium_naphta_Premium_motor_fuel)               0                     364
-     31 qReformedGasolineByPetrol(Crude_2_Heavy_naphta_Premium_motor_fuel)                0                     315
-     32 qReformedGasoline(Regular_motor_fuel)                                       1087.65                      -0
+     25 qReformedGasoline(Premium_motor_fuel)                                        1349.1                      -0
+     26 qReformedGasolineByPetrol(Crude_1_Light_naphta_Premium_motor_fuel)                0                     426
+     27 qReformedGasolineByPetrol(Crude_1_Medium_naphta_Premium_motor_fuel)               0                   369.2
+     28 qReformedGasolineByPetrol(Crude_1_Heavy_naphta_Premium_motor_fuel)             2998                   319.5
+     29 qReformedGasolineByPetrol(Crude_2_Light_naphta_Premium_motor_fuel)                0                     426
+     30 qReformedGasolineByPetrol(Crude_2_Medium_naphta_Premium_motor_fuel)               0                   369.2
+     31 qReformedGasolineByPetrol(Crude_2_Heavy_naphta_Premium_motor_fuel)                0                   319.5
+     32 qReformedGasoline(Regular_motor_fuel)                                       1084.05                      -0
      33 qReformedGasolineByPetrol(Crude_1_Light_naphta_Regular_motor_fuel)                0                     360
      34 qReformedGasolineByPetrol(Crude_1_Medium_naphta_Regular_motor_fuel)               0                     312
-     35 qReformedGasolineByPetrol(Crude_1_Heavy_naphta_Regular_motor_fuel)             2417                     270
+     35 qReformedGasolineByPetrol(Crude_1_Heavy_naphta_Regular_motor_fuel)             2409                     270
      36 qReformedGasolineByPetrol(Crude_2_Light_naphta_Regular_motor_fuel)                0                     360
      37 qReformedGasolineByPetrol(Crude_2_Medium_naphta_Regular_motor_fuel)               0                     312
      38 qReformedGasolineByPetrol(Crude_2_Heavy_naphta_Regular_motor_fuel)                0                     270
-     39 qCrackedGasolineByPetrol(Premium_motor_fuel)                                   1936                     700
-     40 qCrackedGasolineByPetrol(Regular_motor_fuel)                                      0                     600
+     39 qCrackedGasolineByPetrol(Premium_motor_fuel)                                   1935                     710
+     40 qCrackedGasolineByPetrol(Regular_motor_fuel)                                      1                     600
      41 qCrackingBySource(Crude_1_Light_oil)                                           4200                      -0
      42 qCrackingBySource(Crude_1_Heavy_oil)                                           3800                      -0
      43 qCrackingBySource(Crude_2_Light_oil)                                              0                      -0
      44 qCrackingBySource(Crude_2_Heavy_oil)                                              0                      -0
      45 qCrackedOilByProduct(Fuel_oil)                                                    0                    1575
-     46 qPetrolBySource(Crude_1_Light_naphta_Premium_motor_fuel)                          2                     700
-     47 qPetrolBySource(Crude_1_Medium_naphta_Premium_motor_fuel)                      3532                     700
-     48 qPetrolBySource(Crude_1_Heavy_naphta_Premium_motor_fuel)                          4                     700
-     49 qPetrolBySource(Crude_2_Light_naphta_Premium_motor_fuel)                          0                     700
-     50 qPetrolBySource(Crude_2_Medium_naphta_Premium_motor_fuel)                         0                     700
-     51 qPetrolBySource(Crude_2_Heavy_naphta_Premium_motor_fuel)                          0                     700
-     52 qPetrolBySource(Crude_1_Light_naphta_Regular_motor_fuel)                       5998                     600
-     53 qPetrolBySource(Crude_1_Medium_naphta_Regular_motor_fuel)                      6968                     600
-     54 qPetrolBySource(Crude_1_Heavy_naphta_Regular_motor_fuel)                       2988                     600
+     46 qPetrolBySource(Crude_1_Light_naphta_Premium_motor_fuel)                          8                     710
+     47 qPetrolBySource(Crude_1_Medium_naphta_Premium_motor_fuel)                      3504                     710
+     48 qPetrolBySource(Crude_1_Heavy_naphta_Premium_motor_fuel)                         22                     710
+     49 qPetrolBySource(Crude_2_Light_naphta_Premium_motor_fuel)                          0                     710
+     50 qPetrolBySource(Crude_2_Medium_naphta_Premium_motor_fuel)                         0                     710
+     51 qPetrolBySource(Crude_2_Heavy_naphta_Premium_motor_fuel)                          0                     710
+     52 qPetrolBySource(Crude_1_Light_naphta_Regular_motor_fuel)                       5992                     600
+     53 qPetrolBySource(Crude_1_Medium_naphta_Regular_motor_fuel)                      6996                     600
+     54 qPetrolBySource(Crude_1_Heavy_naphta_Regular_motor_fuel)                       2971                     600
      55 qPetrolBySource(Crude_2_Light_naphta_Regular_motor_fuel)                          0                     600
      56 qPetrolBySource(Crude_2_Medium_naphta_Regular_motor_fuel)                         0                     600
      57 qPetrolBySource(Crude_2_Heavy_naphta_Regular_motor_fuel)                          0                     600
