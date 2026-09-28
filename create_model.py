@@ -442,6 +442,6 @@ def create_modelPuLP(distillation, reforming, cracking, lubeOilProduction, octan
               qFuelOil * profit["Fuel oil"] +
               qLubeOil * profit["Lube oil"])
 
-    return (model, q, qd ,qReformedGasoline, qReformedGasolineByPetrol, qCrackingBySource, qCrackedGasolineByPetrol,
+    return (model, q, qd, qReformedGasoline, qReformedGasolineByPetrol, qCrackingBySource, qCrackedGasolineByPetrol,
             qCrackedOilByProduct, qPetrol, qPetrolBySource, qJetFuelBySource, qLubeOilBySource,
             qJetFuel, qFuelOil, qLubeOil, qCrackedOil, qCrackedGasoline)

@@ -398,9 +398,8 @@ with st.sidebar.form(key="form1"):
         elif selectedWrapper == "pulp":
             print(f"=== PuLP START ===")
             (model, q, qd, qReformedGasoline, qReformedGasolineByPetrol, qCrackingBySource, qCrackedGasolineByPetrol,
-             qCrackedOilByProduct, qPetrol, qPetrolBySource, qJetFuelBySource,
-             qLubeOilBySource, qJetFuel, qFuelOil, qLubeOil, qCrackedOil,
-             qCrackedGasoline) = create_model.create_modelPuLP(
+             qCrackedOilByProduct, qPetrol, qPetrolBySource, qJetFuelBySource, qLubeOilBySource,
+             qJetFuel, qFuelOil, qLubeOil, qCrackedOil, qCrackedGasoline) = create_model.create_modelPuLP(
                 distillation, reforming, cracking, lubeOilProduction,
                 octane, octanePetrol,
                 vapourPressure,
