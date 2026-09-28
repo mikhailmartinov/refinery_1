@@ -36,6 +36,7 @@ modelFileNameLPPuLP = os.path.join(dirModel, "model_pulp.lp")
 summaryFileName = os.path.join(dirResults, "summary_data.json")
 solutionFileName = os.path.join(dirResults, "sol.soln")
 graphFlowFileName = os.path.join(dirModel, "flow_data.html")
+descrFileName = os.path.join(curDir, "Problem_description.md")
 
 replaceDict = {"Crude_1": "Crude 1", "Crude_2": "Crude 2",
                "Light_naphta": "Light naphta", "Medium_naphta": "Medium naphta", "Heavy_naphta": "Heavy naphta",
@@ -513,7 +514,7 @@ with dash2:
     style_metric_cards(border_left_color="#DBF227")
 
 with dash3:
-    tab1, tab2 = st.tabs(["Исходные данные", "Схема потоков"])
+    tab1, tab2, tab3 = st.tabs(["Исходные данные", "Схема потоков", "Описание задачи"])
 
     with tab1:
         tab11, tab12, tab13, tab14, tab15, tab16 = st.tabs(["Перегонка", "Риформинг", "Крекинг", "Октановое число",
@@ -564,3 +565,8 @@ with dash3:
     with tab2:
         with open(graphFlowFileName) as gHtml:
             components.html(gHtml.read(), height=600, scrolling=True)
+
+    with tab3:
+        with open(descrFileName, "r", encoding="utf-8") as f:
+            markdownDescriptionContent = f.read()
+        st.markdown(markdownDescriptionContent)
